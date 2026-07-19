@@ -16,6 +16,9 @@ export default function ChatPage() {
         <div className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
           Dati fondamentali aggiornati al {dataset.as_of}, tratti da bilanci ufficiali (10-K). Non
           riguardano il prezzo di mercato live né notizie recenti. Massimo 2 domande per sessione.
+          <br />
+          Le risposte sono generate da un modello AI a scopo dimostrativo e non costituiscono
+          consulenza finanziaria o d&apos;investimento.
         </div>
 
         <div className="mt-6">
