@@ -1,5 +1,4 @@
-import ScreenerTable from "./ScreenerTable";
-import { MOCK_SCREENER_DATA } from "./mock-data";
+import ScreenerData from "./ScreenerData";
 
 export default function Home() {
   return (
@@ -13,7 +12,7 @@ export default function Home() {
           Click a column header to sort.
         </p>
         <div className="mt-6 overflow-x-auto rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
-          <ScreenerTable data={MOCK_SCREENER_DATA} />
+          <ScreenerData />
         </div>
       </div>
     </main>

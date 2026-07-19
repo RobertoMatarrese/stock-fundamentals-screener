@@ -1,5 +1,6 @@
 import requests
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.cache import TTLCache
 from app.finnhub_client import FinnhubError, get_basic_financials
@@ -9,6 +10,15 @@ from app.tickers import TICKERS
 CACHE_TTL_SECONDS = 300
 
 app = FastAPI()
+
+# Read-only, unauthenticated public data -- open CORS is fine, no cookies/credentials involved.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
+
 _cache = TTLCache(ttl_seconds=CACHE_TTL_SECONDS)
 
 
