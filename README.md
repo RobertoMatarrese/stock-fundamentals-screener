@@ -5,6 +5,13 @@ fixed basket of 12 large-cap tickers, and a retrieval-augmented chat that
 answers questions about Apple's real financial statements from the last
 10 years.
 
+**Live:** [stock-fundamentals-screener.vercel.app](https://stock-fundamentals-screener.vercel.app)
+([screener](https://stock-fundamentals-screener.vercel.app/), [Apple chat](https://stock-fundamentals-screener.vercel.app/chat))
+
+The backend runs on Render's free tier, which spins down after inactivity —
+the first request after a quiet period can take 50+ seconds while it wakes
+back up. That's a known, disclosed limitation of the free tier, not a bug.
+
 ## Why this project exists
 
 I'm transitioning from 17 years in project management into a hands-on,
@@ -171,10 +178,9 @@ npm run test
 
 ## Status
 
-Both features work end-to-end locally against live data (Finnhub, Gemini,
-Upstash) — screener table, RAG chat with charts, server-side rate limiting,
-CI running both test suites. Not yet deployed — see the commit history for
-what's left. A screenshot and live demo link will be added once that lands.
+Deployed and live (see link above) — screener backend on Render, frontend +
+chat on Vercel, both verified against real data (Finnhub, Gemini, Upstash).
+CI runs both test suites on every push. A screenshot will be added next.
 
 ## Development process
 
