@@ -84,18 +84,20 @@ export default function ScreenerTable({ data }: { data: ScreenerRow[] }) {
   return (
     <table className="w-full border-collapse text-sm">
       <thead>
-        <tr className="border-b border-neutral-300 dark:border-neutral-700">
+        <tr className="border-b border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900/60">
           {COLUMNS.map((column) => (
             <th
               key={column.key}
               title={column.title}
               onClick={() => handleSort(column.key)}
-              className={`cursor-pointer select-none whitespace-nowrap px-2.5 py-1.5 font-semibold hover:text-blue-600 dark:hover:text-blue-400 ${
+              className={`cursor-pointer select-none whitespace-nowrap px-2.5 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400 ${
                 column.numeric ? "text-right" : "text-left"
               }`}
             >
               {column.label}
-              {sortKey === column.key ? (sortDirection === "asc" ? " ▲" : " ▼") : ""}
+              <span className="ml-0.5 inline-block w-2.5 text-[10px] text-blue-600 dark:text-blue-400">
+                {sortKey === column.key ? (sortDirection === "asc" ? "▲" : "▼") : ""}
+              </span>
             </th>
           ))}
         </tr>
@@ -104,17 +106,17 @@ export default function ScreenerTable({ data }: { data: ScreenerRow[] }) {
         {sortedData.map((row) => (
           <tr
             key={row.symbol}
-            className="border-b border-neutral-200 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
+            className="border-b border-neutral-100 hover:bg-neutral-50 dark:border-neutral-900 dark:hover:bg-neutral-900/60"
           >
             {COLUMNS.map((column) => (
               <td
                 key={column.key}
                 title={column.key === "name" ? row.name : undefined}
-                className={`px-2.5 py-1.5 ${
+                className={`px-2.5 py-2 ${
                   column.numeric
                     ? "whitespace-nowrap text-right tabular-nums"
                     : column.key === "name"
-                      ? "max-w-[160px] truncate"
+                      ? "max-w-[160px] truncate font-medium text-zinc-900 dark:text-zinc-100"
                       : "whitespace-nowrap text-left"
                 }`}
               >
