@@ -31,6 +31,18 @@ interface Exchange {
 }
 
 const MAX_QUESTION_LENGTH = 300;
+const SERIES_COLOR = "var(--chart-series-1)";
+const GRID_COLOR = "var(--chart-grid)";
+const AXIS_COLOR = "var(--chart-axis)";
+
+const TOOLTIP_CONTENT_STYLE = {
+  background: "var(--chart-surface)",
+  border: "1px solid var(--chart-grid)",
+  borderRadius: 8,
+  fontSize: 12,
+};
+const TOOLTIP_LABEL_STYLE = { color: "var(--chart-ink-primary)", fontWeight: 600 };
+const TOOLTIP_ITEM_STYLE = { color: "var(--chart-ink-secondary)" };
 
 function ChartRenderer({ chart }: { chart: ChartData }) {
   return (
@@ -39,19 +51,35 @@ function ChartRenderer({ chart }: { chart: ChartData }) {
       <ResponsiveContainer width="100%" height={220}>
         {chart.tipo === "bar" ? (
           <BarChart data={chart.dati}>
-            <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-            <XAxis dataKey="label" fontSize={12} />
-            <YAxis fontSize={12} />
-            <Tooltip />
-            <Bar dataKey="valore" fill="#2563eb" />
+            <CartesianGrid stroke={GRID_COLOR} vertical={false} />
+            <XAxis dataKey="label" fontSize={12} stroke={AXIS_COLOR} tickLine={false} />
+            <YAxis fontSize={12} stroke={AXIS_COLOR} tickLine={false} axisLine={false} />
+            <Tooltip
+              contentStyle={TOOLTIP_CONTENT_STYLE}
+              labelStyle={TOOLTIP_LABEL_STYLE}
+              itemStyle={TOOLTIP_ITEM_STYLE}
+            />
+            <Bar dataKey="valore" fill={SERIES_COLOR} radius={[4, 4, 0, 0]} maxBarSize={24} />
           </BarChart>
         ) : (
           <LineChart data={chart.dati}>
-            <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-            <XAxis dataKey="label" fontSize={12} />
-            <YAxis fontSize={12} />
-            <Tooltip />
-            <Line type="monotone" dataKey="valore" stroke="#2563eb" strokeWidth={2} dot={false} />
+            <CartesianGrid stroke={GRID_COLOR} vertical={false} />
+            <XAxis dataKey="label" fontSize={12} stroke={AXIS_COLOR} tickLine={false} />
+            <YAxis fontSize={12} stroke={AXIS_COLOR} tickLine={false} axisLine={false} />
+            <Tooltip
+              contentStyle={TOOLTIP_CONTENT_STYLE}
+              labelStyle={TOOLTIP_LABEL_STYLE}
+              itemStyle={TOOLTIP_ITEM_STYLE}
+            />
+            <Line
+              type="monotone"
+              dataKey="valore"
+              stroke={SERIES_COLOR}
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              dot={false}
+            />
           </LineChart>
         )}
       </ResponsiveContainer>
@@ -116,26 +144,23 @@ export default function ChatUI() {
   const limitReached = remaining === 0;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
       {exchanges.length > 0 && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {exchanges.map((exchange, index) => (
-            <div
-              key={index}
-              className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-950"
-            >
-              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            <div key={index} className="flex flex-col gap-1.5">
+              <p className="self-end rounded-2xl rounded-br-sm bg-blue-600 px-3 py-2 text-sm text-white">
                 {exchange.question}
               </p>
               {exchange.error ? (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-400">{exchange.error}</p>
+                <p className="self-start rounded-2xl rounded-bl-sm bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+                  {exchange.error}
+                </p>
               ) : exchange.answer ? (
-                <>
-                  <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300">
-                    {exchange.answer.testo}
-                  </p>
+                <div className="self-start rounded-2xl rounded-bl-sm bg-neutral-100 px-3 py-2 text-sm text-zinc-800 dark:bg-neutral-800 dark:text-zinc-100">
+                  <p>{exchange.answer.testo}</p>
                   {exchange.answer.grafico && <ChartRenderer chart={exchange.answer.grafico} />}
-                </>
+                </div>
               ) : null}
             </div>
           ))}
