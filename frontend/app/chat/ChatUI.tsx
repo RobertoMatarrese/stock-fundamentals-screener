@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type KeyboardEvent } from "react";
 import {
   Bar,
   BarChart,
@@ -65,8 +65,7 @@ export default function ChatUI() {
   const [loading, setLoading] = useState(false);
   const [remaining, setRemaining] = useState<number | null>(null);
 
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
+  async function submitQuestion() {
     const trimmed = question.trim();
     if (!trimmed || loading || remaining === 0) return;
 
@@ -99,6 +98,18 @@ export default function ChatUI() {
       setExchanges((prev) => [...prev, { question: trimmed, error: "Errore di rete, riprova." }]);
     } finally {
       setLoading(false);
+    }
+  }
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    submitQuestion();
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      submitQuestion();
     }
   }
 
@@ -137,9 +148,10 @@ export default function ChatUI() {
         <textarea
           value={question}
           onChange={(event) => setQuestion(event.target.value)}
+          onKeyDown={handleKeyDown}
           maxLength={MAX_QUESTION_LENGTH}
           disabled={loading || limitReached}
-          placeholder="Es. Gli utili di Apple sono in crescita?"
+          placeholder="Es. Gli utili di Apple sono in crescita? (Invio per inviare, Shift+Invio per andare a capo)"
           rows={2}
           className="w-full rounded-lg border border-neutral-300 bg-white p-3 text-sm disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-950"
         />
