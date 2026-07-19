@@ -8,6 +8,7 @@ type SortDirection = "asc" | "desc";
 interface Column {
   key: keyof ScreenerRow;
   label: string;
+  title?: string;
   numeric: boolean;
   format?: (value: number) => string;
 }
@@ -21,10 +22,16 @@ const COLUMNS: Column[] = [
   { key: "sector", label: "Sector", numeric: false },
   { key: "pe_ratio", label: "P/E", numeric: true, format: ratio },
   { key: "roe", label: "ROE", numeric: true, format: percent },
-  { key: "debt_to_equity", label: "Debt/Equity", numeric: true, format: ratio },
+  { key: "debt_to_equity", label: "D/E", title: "Debt / Equity", numeric: true, format: ratio },
   { key: "net_margin", label: "Net Margin", numeric: true, format: percent },
-  { key: "asset_turnover", label: "Asset Turnover", numeric: true, format: ratio },
-  { key: "equity_multiplier", label: "Equity Multiplier", numeric: true, format: ratio },
+  { key: "asset_turnover", label: "Turnover", title: "Asset Turnover", numeric: true, format: ratio },
+  {
+    key: "equity_multiplier",
+    label: "Leverage",
+    title: "Equity Multiplier (Assets / Equity)",
+    numeric: true,
+    format: ratio,
+  },
 ];
 
 function formatCell(column: Column, value: ScreenerRow[keyof ScreenerRow]): string {
@@ -81,8 +88,9 @@ export default function ScreenerTable({ data }: { data: ScreenerRow[] }) {
           {COLUMNS.map((column) => (
             <th
               key={column.key}
+              title={column.title}
               onClick={() => handleSort(column.key)}
-              className={`cursor-pointer select-none whitespace-nowrap px-3 py-2 font-semibold hover:text-blue-600 dark:hover:text-blue-400 ${
+              className={`cursor-pointer select-none whitespace-nowrap px-2.5 py-1.5 font-semibold hover:text-blue-600 dark:hover:text-blue-400 ${
                 column.numeric ? "text-right" : "text-left"
               }`}
             >
@@ -101,7 +109,14 @@ export default function ScreenerTable({ data }: { data: ScreenerRow[] }) {
             {COLUMNS.map((column) => (
               <td
                 key={column.key}
-                className={`whitespace-nowrap px-3 py-2 ${column.numeric ? "text-right tabular-nums" : "text-left"}`}
+                title={column.key === "name" ? row.name : undefined}
+                className={`px-2.5 py-1.5 ${
+                  column.numeric
+                    ? "whitespace-nowrap text-right tabular-nums"
+                    : column.key === "name"
+                      ? "max-w-[160px] truncate"
+                      : "whitespace-nowrap text-left"
+                }`}
               >
                 {formatCell(column, row[column.key])}
               </td>
