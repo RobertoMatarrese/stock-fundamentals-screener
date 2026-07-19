@@ -7,7 +7,7 @@ import { Redis } from "@upstash/redis";
 // the actual goal here (protecting the shared free Gemini quota from
 // being drained). IP is harder to casually reset.
 // TODO: temporarily raised for testing -- put back to 2 before considering this "done".
-const MAX_QUESTIONS_PER_WINDOW = 1000;
+const MAX_QUESTIONS_PER_WINDOW = 2;
 const WINDOW = "1 d";
 
 let ratelimit: Ratelimit | null = null;
