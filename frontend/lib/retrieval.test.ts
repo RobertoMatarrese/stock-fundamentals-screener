@@ -15,6 +15,16 @@ describe("retrieve", () => {
     expect(result.chunkIds).toContain("cashflow");
   });
 
+  it("matches a bare 'cash' (cash on hand) question to the cashflow chunk", () => {
+    const result = retrieve("Quanto cash ha Apple?");
+
+    expect(result.chunkIds).toContain("cashflow");
+    const cashflowContext = result.context.cashflow as {
+      fiscalYearHistory: { cashAndEquivalents: unknown }[];
+    };
+    expect(cashflowContext.fiscalYearHistory[0].cashAndEquivalents).toBeDefined();
+  });
+
   it("matches a valuation/competitor question to the valuation chunk", () => {
     const result = retrieve("È cara rispetto ai competitor?");
 

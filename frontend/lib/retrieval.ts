@@ -52,7 +52,7 @@ export const CHUNKS: RetrievalChunk[] = [
     id: "cashflow",
     label: "Cash flow",
     keywords: [
-      "cash flow", "flusso di cassa", "liquidit", "cassa", "fcf", "free cash flow",
+      "cash flow", "flusso di cassa", "liquidit", "cassa", "cash", "fcf", "free cash flow",
       "capex", "investiment",
     ],
     getData: (data) => ({
