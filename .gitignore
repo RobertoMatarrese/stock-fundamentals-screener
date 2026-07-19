@@ -4,7 +4,7 @@
 .env.*.local
 
 # Private project brief (contains NDA-adjacent context, not for public repo)
-CLAUDE.md
+/CLAUDE.md
 
 # Python
 __pycache__/
