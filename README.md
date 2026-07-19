@@ -22,30 +22,70 @@ purpose: I can defend the logic in an interview, not just the code.
 ## What it does
 
 Screens a fixed set of 12 tickers across 8 sectors (AAPL, MSFT, JNJ, UNH,
-JPM, V, KO, PG, XOM, HON, HD, DIS) and displays, per ticker:
+JPM, V, KO, PG, XOM, HON, HD, DIS) and displays, per ticker, in a sortable
+table:
 
 - P/E ratio (trailing twelve months)
 - Return on equity (trailing twelve months)
 - Debt-to-equity ratio
+- A DuPont decomposition of ROE — net margin × asset turnover × equity
+  multiplier — so a high ROE driven by leverage reads differently from one
+  driven by genuine margin/efficiency
 
-in a sortable table, so a viewer can quickly compare quality/value profiles
-across sectors.
+Missing data from Finnhub (common on smaller or newer metrics) renders as
+`—` instead of breaking the row or the request.
 
 ## Tech stack
 
 - **Backend:** Python + FastAPI
-- **Frontend:** Next.js (App Router) + React
+- **Frontend:** Next.js (App Router) + React + TypeScript + Tailwind CSS
 - **Data source:** [Finnhub](https://finnhub.io/) free-tier API (basic
   financials endpoint)
 - **Testing:** pytest, with all external API calls mocked — no live network
   calls in the test suite or CI
 - **CI:** GitHub Actions running the test suite on every push/PR
 
+## Running it locally
+
+Requires Python 3.11+, Node 18+, and a free [Finnhub API key](https://finnhub.io/register).
+
+**Backend**
+
+```bash
+cd backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1  # Windows PowerShell; use `source .venv/bin/activate` on macOS/Linux
+pip install -r requirements.txt
+cp .env.example .env        # then fill in FINNHUB_API_KEY
+python -m uvicorn app.main:app --port 8000
+```
+
+**Frontend** (separate terminal)
+
+```bash
+cd frontend
+npm install
+cp .env.example .env.local  # defaults to http://localhost:8000, adjust if needed
+npm run dev
+```
+
+Then open `http://localhost:3000`. The raw API is at
+`http://localhost:8000/api/screener`.
+
+**Tests**
+
+```bash
+cd backend
+.venv\Scripts\Activate.ps1
+pytest -v
+```
+
 ## Status
 
-🚧 Work in progress. See commit history for build order — this README will
-be updated with setup instructions, a live demo link, and a screenshot as
-each milestone lands.
+Backend and frontend are wired end-to-end against live Finnhub data, with a
+sortable table, loading/error states, and CI running the test suite on every
+push. Not yet deployed — see the commit history for what's left. A
+screenshot and live demo link will be added once that lands.
 
 ## Development process
 
